@@ -1,0 +1,24 @@
+{
+  "name": "mua-userscript",
+  "version": "0.0.0-dev",
+  "private": true,
+  "description": "MUA - Web Unicode Converter userscript (TypeScript rewrite)",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "build:watch": "node scripts/build.js --watch",
+    "test": "vitest",
+    "lint": "eslint . --ext .ts",
+    "clean": "rm -rf dist .esbuild-cache",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.0",
+    "esbuild": "^0.19.4",
+    "eslint": "^8.50.0",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.4.0",
+    "vitest": "^1.3.0"
+  }
+}
