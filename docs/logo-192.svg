@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192" role="img" aria-labelledby="titleDesc">
+  <title id="titleDesc">MUA — Web Unicode Converter</title>
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#60A5FA"/>
+      <stop offset="100%" stop-color="#5EEAD4"/>
+    </linearGradient>
+    <filter id="s" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#072033" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <rect width="192" height="192" rx="28" fill="#071428" />
+
+  <!-- soft gradient circle -->
+  <g filter="url(#s)">
+    <circle cx="96" cy="84" r="54" fill="url(#g1)" opacity="0.98" />
+  </g>
+
+  <!-- stylized Myanmar letter motif -->
+  <g transform="translate(96,88) scale(1.0)" fill="#03151B" font-family="Georgia, 'Noto Sans Myanmar', serif">
+    <path d="M -10 -6 C -6 -14 14 -28 28 -10 C 10 -8 6 2 -2 12 C -12 26 -26 28 -34 18 C -22 8 -16 2 -10 -6 Z" fill="#03151B" opacity="0.18"/>
+    <path d="M -18 6 C -12 -12 8 -28 22 -12 C 6 -6 2 6 -6 20 C -16 36 -34 34 -40 22 C -26 12 -22 8 -18 6 Z" fill="#03151B" opacity="0.08"/>
+  </g>
+
+  <!-- central monogram (M) with Myanmar curve hint -->
+  <g transform="translate(96,92)" fill="#01202A">
+    <path d="M -28 -10 L -4 34 L 4 34 L 30 -10 L 18 -10 L 4 18 L -10 -10 Z" fill-opacity="0.045" />
+    <path d="M -22 -6 C -8 18 8 18 22 -6" stroke="#04232B" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.12"/>
+  </g>
+
+</svg>

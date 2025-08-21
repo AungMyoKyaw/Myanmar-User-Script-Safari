@@ -6,6 +6,9 @@
   "scripts": {
     "build": "node scripts/build.js",
     "build:watch": "node scripts/build.js --watch",
+    "publish:local": "sh scripts/publish.sh",
+    "predeploy": "npm run build && sh scripts/publish.sh",
+    "deploy": "npx gh-pages -d docs",
     "test": "vitest",
     "lint": "eslint . --ext .ts",
     "clean": "rm -rf dist .esbuild-cache",
