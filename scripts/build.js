@@ -19,7 +19,16 @@ const path = require('path');
       minify: true,
       sourcemap: false
     });
-    const workerCode = workerResult.outputFiles[0].text;
+    let workerCode = workerResult.outputFiles[0].text;
+    // Remove a top-level "use strict" directive from the generated worker code.
+    // Some userscript hosts (or browsers) wrap the whole script in a function
+    // with a non-simple parameter list which makes an inner "use strict" illegal
+    // (SyntaxError). Strip only the leading directive to avoid accidental removal
+    // of string usages elsewhere.
+    workerCode = workerCode.replace(
+      /^\s*(?:"use strict"|'use strict')\s*;?\s*/i,
+      ''
+    );
 
     // Build main script and inject worker code as a Blob string
     const banner =
@@ -49,7 +58,16 @@ const path = require('path');
       }
     });
 
-    const out = banner + mainResult.outputFiles[0].text;
+    // Strip a leading "use strict" from the main bundle as well for the same
+    // reason (userscript hosts may wrap the script in functions with
+    // non-simple parameter lists).
+    let mainText = mainResult.outputFiles[0].text;
+    mainText = mainText.replace(
+      /^\s*(?:"use strict"|'use strict')\s*;?\s*/i,
+      ''
+    );
+
+    const out = banner + mainText;
     fs.mkdirSync(path.join(__dirname, '../dist'), { recursive: true });
     fs.writeFileSync(path.join(__dirname, '../dist/mua.user.js'), out);
     console.log('Built dist/mua.user.js');
