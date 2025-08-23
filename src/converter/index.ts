@@ -3,7 +3,9 @@
 // Falls back to a lightweight heuristic if the library is not installed.
 
 export function isMyanmar(input: string): boolean {
-  return /[\u1000-\u109F]/u.test(input);
+  return /[\u1000-\u109F\uAA60-\uAA7F\u1031\u1036\u1037\u103b\u103c\u103d\u103e]/u.test(
+    input
+  );
 }
 
 // Heuristic fallback for Zawgyi-like sequences (used when detector isn't available)
@@ -111,7 +113,7 @@ export function convertZ1ToUni(input: string): string {
 export function detectAndConvert(inputs: string[], convert = true) {
   return inputs.map((s) => {
     const isMy = isMyanmar(s);
-    const isZg = isMy && detectZawgyi(s);
+    const isZg = detectZawgyi(s);
     return {
       input: s,
       isMyanmar: isMy,

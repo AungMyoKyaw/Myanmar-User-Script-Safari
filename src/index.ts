@@ -132,7 +132,8 @@ function attachMutations() {
     settings.debounceMs,
     (nodes) => {
       // Prefilter by Myanmar regex quickly
-      const myanmar = /[\u1000-\u109F\uAA60-\uAA7F]/u;
+      const myanmar =
+        /[\u1000-\u109F\uAA60-\uAA7F\u1031\u1036\u1037\u103b\u103c\u103d\u103e]/u;
       const cand = nodes.filter((t) => myanmar.test(t.data));
       if (cand.length) processNodes(cand);
     },
@@ -146,7 +147,8 @@ function attachMutations() {
       createMutationManager(
         settings.debounceMs,
         (nodes) => {
-          const myanmar = /[\u1000-\u109F\uAA60-\uAA7F]/u;
+          const myanmar =
+            /[\u1000-\u109F\uAA60-\uAA7F\u1031\u1036\u1037\u103b\u103c\u103d\u103e]/u;
           const cand = nodes.filter((t) => myanmar.test(t.data));
           if (cand.length) processNodes(cand);
         },
@@ -162,7 +164,8 @@ function attachMutations() {
         createMutationManager(
           settings.debounceMs,
           (nodes) => {
-            const myanmar = /[\u1000-\u109F\uAA60-\uAA7F]/u;
+            const myanmar =
+              /[\u1000-\u109F\uAA60-\uAA7F\u1031\u1036\u1037\u103b\u103c\u103d\u103e]/u;
             const cand = nodes.filter((t) => myanmar.test(t.data));
             if (cand.length) processNodes(cand);
           },

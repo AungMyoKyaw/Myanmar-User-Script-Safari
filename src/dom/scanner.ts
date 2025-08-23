@@ -12,7 +12,8 @@ const IGNORED = new Set([
 ]);
 
 export function collectCandidateTextNodes(root: ParentNode = document): Text[] {
-  const myanmarPrefilter = /[\u1000-\u109F\uAA60-\uAA7F]/u;
+  const myanmarPrefilter =
+    /[\u1000-\u109F\uAA60-\uAA7F\u1031\u1036\u1037\u103b\u103c\u103d\u103e]/u;
   const walkerFilter: NodeFilter = {
     acceptNode(node: Node) {
       const parent = (node as Text).parentElement;
