@@ -89,16 +89,6 @@ export function convertZ1ToUni(input: string): string {
 
   if (COMPAT_OVERRIDES[input]) return COMPAT_OVERRIDES[input];
 
-  // Avoid converting if input does not appear to be Zawgyi — this prevents
-  // double-conversion when callers pass Unicode text.
-  try {
-    const isZg = detectZawgyi(input);
-    if (!isZg) return input;
-  } catch (_e) {
-    // If detection fails for any reason, conservatively avoid converting.
-    return input;
-  }
-
   if (_converter) {
     try {
       return _converter.zawgyiToUnicode(input);

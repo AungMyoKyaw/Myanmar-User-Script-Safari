@@ -19,7 +19,7 @@ export function collectCandidateTextNodes(root: ParentNode = document): Text[] {
       const parent = (node as Text).parentElement;
       if (!parent) return NodeFilter.FILTER_REJECT;
       if (IGNORED.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
-      if (parent.closest('input,textarea')) return NodeFilter.FILTER_REJECT;
+      if (parent.closest('input,textarea,[contenteditable="true"]')) return NodeFilter.FILTER_REJECT;
       const txt = (node as Text).data;
       if (!txt || txt.trim().length === 0) return NodeFilter.FILTER_REJECT;
       if (!myanmarPrefilter.test(txt)) return NodeFilter.FILTER_REJECT;
