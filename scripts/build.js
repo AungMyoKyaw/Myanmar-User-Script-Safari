@@ -55,25 +55,8 @@ const path = require('path');
     const browserResolvePlugin = {
       name: 'browser-resolve-myanmar-tools',
       setup(build) {
-        // Replace imports that explicitly reference the package build_node folder,
-        // e.g. require('myanmar-tools/build_node/zawgyi_detector')
-        build.onResolve({ filter: /^myanmar-tools\/build_node\// }, (args) => {
-          const replacement = args.path.replace(
-            'build_node/',
-            'build_browser/'
-          );
-          return { path: replacement, external: false, namespace: 'file' };
-        });
-
-        // Also handle relative requires from inside the package that point to
-        // "./build_node/..." or "../build_node/..." by rewriting them to the
-        // browser build. esbuild will call onResolve with the importer set to
-        // the file that imports it; detect when the importer is inside the
-        // myanmar-tools package and rewrite accordingly. This handles both
-        // "./build_node/..." and parent-relative "../build_node/..." imports.
-        build.onResolve({ filter: /(^|\.|\/)\.?\.?\/build_node\// }, (args) => {
-          // Only rewrite package-local relative imports coming from the
-          // myanmar-tools package sources in node_modules.
+        build.onResolve({ filter: /build_node/ }, (args) => {
+          // Only rewrite imports coming from the myanmar-tools package.
           if (
             !args.importer ||
             !args.importer.includes('node_modules/myanmar-tools')
@@ -81,23 +64,19 @@ const path = require('path');
             return null;
           }
 
-          // Replace the folder name and resolve relative to the importer so
-          // esbuild can find the browser build file on disk.
-          const pathMod = require('path');
-          const replaced = args.path.replace('build_node/', 'build_browser/');
+          const newPath = args.path.replace('build_node', 'build_browser');
 
-          // If the import is relative (starts with ./ or ../), resolve it
-          // against the importer's directory to produce an absolute path.
-          if (replaced.startsWith('./') || replaced.startsWith('../')) {
+          // For relative paths, resolve them against the importer's directory
+          // to create an absolute path. This is necessary for esbuild to find them.
+          if (newPath.startsWith('./') || newPath.startsWith('../')) {
+            const pathMod = require('path');
             const importerDir = pathMod.dirname(args.importer);
-            const resolved = pathMod.resolve(importerDir, replaced);
-            return { path: resolved, external: false, namespace: 'file' };
+            const resolvedPath = pathMod.resolve(importerDir, newPath);
+            return { path: resolvedPath };
           }
 
-          // Otherwise fall back to letting esbuild resolve it normally (this
-          // case is unlikely here because package-local relative imports
-          // should start with ./ or ../).
-          return null;
+          // For non-relative (bare) imports, just return the rewritten path.
+          return { path: newPath };
         });
       }
     };
