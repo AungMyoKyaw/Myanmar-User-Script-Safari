@@ -32,14 +32,12 @@ export default defineConfig({
     })
   ],
   build: {
-    lib: {
-      entry: 'src/index.ts',
-      name: 'mua-userscript'
-    },
+    outDir: 'docs/dist',
+    emptyOutDir: true,
+    assetsInlineLimit: 100000000,
     rollupOptions: {
+      input: 'src/index.ts',
       output: {
-        extend: true,
-        format: 'umd',
         entryFileNames: 'mua.user.js'
       }
     }

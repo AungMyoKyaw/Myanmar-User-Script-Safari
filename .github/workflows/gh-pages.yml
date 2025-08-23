@@ -29,12 +29,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Prepare userscript and docs/dist
-        run: |
-          set -e
-          mkdir -p docs/dist
-          cp dist/mua.user.js docs/dist/mua.user.js
-
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 

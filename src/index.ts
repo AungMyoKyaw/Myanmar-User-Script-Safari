@@ -1,6 +1,6 @@
 // Entry point for userscript. Bootstraps worker, settings, scanner, and mutations.
 
-import Worker from './worker/worker-bootstrap?worker';
+import Worker from './worker/worker-bootstrap?worker&inline';
 import { createMutationManager } from './dom/mutation-manager';
 import { collectCandidateTextNodes } from './dom/scanner';
 import { applyConversions } from './dom/updater';
