@@ -35,7 +35,10 @@ export function createMutationManager(
         for (const n of m.addedNodes) {
           // Only process nodes that are not contained in another added node.
           // This is a simple optimization to avoid processing the same nodes multiple times.
-          if (!n.parentElement || !isNodeContained(n.parentElement, m.addedNodes)) {
+          if (
+            !n.parentElement ||
+            !isNodeContained(n.parentElement, m.addedNodes)
+          ) {
             collectTextNodes(n, batch);
           }
         }
@@ -72,7 +75,11 @@ function collectTextNodes(node: Node, out: Set<Text>) {
   if (node.nodeType === Node.TEXT_NODE) {
     const parent = (node as Text).parentElement;
     if (!parent) return;
-    if (ignoredTags.has(parent.tagName) || parent.closest('[contenteditable="true"]')) return;
+    if (
+      ignoredTags.has(parent.tagName) ||
+      parent.closest('[contenteditable="true"]')
+    )
+      return;
     if (parent.closest('input,textarea')) return;
     out.add(node as Text);
     return;
@@ -80,14 +87,20 @@ function collectTextNodes(node: Node, out: Set<Text>) {
 
   if (node.nodeType === Node.ELEMENT_NODE) {
     const el = node as Element;
-    if (ignoredTags.has(el.tagName) || el.closest('[contenteditable="true"]')) return;
+    if (ignoredTags.has(el.tagName) || el.closest('[contenteditable="true"]'))
+      return;
     if (el.closest('input,textarea')) return;
 
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     let cur: Node | null = walker.nextNode();
     while (cur) {
       const parent = (cur as Text).parentElement;
-      if (parent && !ignoredTags.has(parent.tagName) && !parent.closest('input,textarea') && !parent.closest('[contenteditable="true"]')) {
+      if (
+        parent &&
+        !ignoredTags.has(parent.tagName) &&
+        !parent.closest('input,textarea') &&
+        !parent.closest('[contenteditable="true"]')
+      ) {
         out.add(cur as Text);
       }
       cur = walker.nextNode();
