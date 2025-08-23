@@ -46,6 +46,26 @@ const path = require('path');
       `// @match       *://*/*\n` +
       `// ==/UserScript==\n\n`;
 
+    // When bundling for the browser, prefer the browser builds of some
+    // dependencies (for example `myanmar-tools` ships both `build_node` and
+    // `build_browser` folders). esbuild running with platform:'browser' can
+    // still try to resolve node-targeted requires like
+    // "myanmar-tools/build_node/zawgyi_detector". Add a simple plugin to
+    // rewrite those imports to the browser equivalents.
+    const browserResolvePlugin = {
+      name: 'browser-resolve-myanmar-tools',
+      setup(build) {
+        build.onResolve({ filter: /^myanmar-tools\/build_node\// }, (args) => {
+          // replace build_node with build_browser in the path
+          const replacement = args.path.replace(
+            'build_node/',
+            'build_browser/'
+          );
+          return { path: replacement, external: false, namespace: 'file' };
+        });
+      }
+    };
+
     const mainResult = await esbuild.build({
       entryPoints: [path.join(__dirname, '../src/index.ts')],
       bundle: true,
@@ -55,7 +75,8 @@ const path = require('path');
       sourcemap: false,
       define: {
         INLINE_WORKER: JSON.stringify(workerCode)
-      }
+      },
+      plugins: [browserResolvePlugin]
     });
 
     // Strip a leading "use strict" from the main bundle as well for the same
