@@ -55,13 +55,34 @@ const path = require('path');
     const browserResolvePlugin = {
       name: 'browser-resolve-myanmar-tools',
       setup(build) {
+        // Replace imports that explicitly reference the package build_node folder,
+        // e.g. require('myanmar-tools/build_node/zawgyi_detector')
         build.onResolve({ filter: /^myanmar-tools\/build_node\// }, (args) => {
-          // replace build_node with build_browser in the path
           const replacement = args.path.replace(
             'build_node/',
             'build_browser/'
           );
           return { path: replacement, external: false, namespace: 'file' };
+        });
+
+        // Also handle relative requires from inside the package that point to
+        // "./build_node/..." by rewriting them to the browser build. esbuild
+        // will call onResolve with the importer set to the file that imports
+        // it; detect when the importer is inside the myanmar-tools package and
+        // rewrite accordingly.
+        build.onResolve({ filter: /(^|\/)\.\/build_node\// }, (args) => {
+          // If the importer path contains 'node_modules/myanmar-tools', treat
+          // this as a package-local relative import and rewrite to the
+          // corresponding build_browser path.
+          if (args.importer?.includes('node_modules/myanmar-tools')) {
+            const newPath = args.path.replace('build_node/', 'build_browser/');
+            // Resolve relative to the importer directory so esbuild can find it
+            const importerDir = require('path').dirname(args.importer);
+            const resolved = require('path').join(importerDir, newPath);
+            return { path: resolved, external: false };
+          }
+          // otherwise, let esbuild continue normal resolution
+          return null;
         });
       }
     };
