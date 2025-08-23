@@ -1,13 +1,6 @@
 // Entry point for userscript. Bootstraps worker, settings, scanner, and mutations.
 
-declare const INLINE_WORKER: string;
-
-function createWorkerFromInline(code: string): Worker {
-  const blob = new Blob([code], { type: 'application/javascript' });
-  const url = URL.createObjectURL(blob);
-  return new Worker(url);
-}
-
+import Worker from './worker/worker-bootstrap?worker';
 import { createMutationManager } from './dom/mutation-manager';
 import { collectCandidateTextNodes } from './dom/scanner';
 import { applyConversions } from './dom/updater';
@@ -27,9 +20,7 @@ registerMenu(settings, (s) => {
   if (settings.enabled) bootstrap();
 });
 try {
-  worker = createWorkerFromInline(
-    typeof INLINE_WORKER === 'string' ? INLINE_WORKER : ''
-  );
+  worker = new Worker();
   worker.onmessage = (e) => {
     console.log('worker', e.data);
   };

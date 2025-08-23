@@ -3,12 +3,13 @@
   "version": "0.0.0-dev",
   "private": true,
   "description": "MUA - Web Unicode Converter userscript (TypeScript rewrite)",
+  "author": "Aung Myo Kyaw",
+  "license": "GPL-3.0",
+  "homepage": "https://github.com/AungMyoKyaw/MUA-Web-Unicode-Converter",
   "scripts": {
-    "build": "node scripts/build.js",
-    "build:watch": "node scripts/build.js --watch",
-    "publish:local": "sh scripts/publish.sh",
-    "predeploy": "npm run build && sh scripts/publish.sh",
-    "deploy": "npx gh-pages -d docs",
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "deploy": "npm run build && npx gh-pages -d docs",
     "test": "vitest",
     "lint": "eslint . --ext .ts",
     "clean": "rm -rf dist .esbuild-cache",
@@ -17,11 +18,12 @@
   },
   "devDependencies": {
     "@types/node": "^20.4.0",
-    "esbuild": "^0.19.4",
     "eslint": "^8.50.0",
     "jsdom": "^26.1.0",
     "prettier": "^3.6.2",
     "typescript": "^5.4.0",
+    "vite": "^7.1.3",
+    "vite-plugin-userscript": "^0.1.3",
     "vitest": "^1.3.0"
   },
   "dependencies": {
